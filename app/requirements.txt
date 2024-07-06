@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+elasticsearch==7.10.0
+elasticsearch-dsl
+openai==0.28
+python-decouple
+pytest
+httpx
+pytest-asyncio
+pytest-mock
