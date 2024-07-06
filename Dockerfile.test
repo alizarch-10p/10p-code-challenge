@@ -1,0 +1,17 @@
+FROM python:3.8-slim
+
+WORKDIR /code
+
+# Copy the application's requirements and install the Python dependencies
+COPY ./app/requirements.txt /code/
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install pytest and related packages for testing
+RUN pip install pytest pytest-asyncio httpx
+
+# Copy the app and test directories
+COPY ./app /code/app
+COPY ./tests /code/tests
+
+# Command to run tests
+CMD ["pytest", "/code/tests"]

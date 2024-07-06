@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  fastapi-app:
+    build: .
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./app:/code/app
+    depends_on:
+      - elasticsearch
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+
+  test-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+      - ./app:/code/app
+      - ./tests:/code/tests
+    depends_on:
+      - fastapi-app
+      - elasticsearch
+
+volumes:
+  esdata1:
+    driver: local
