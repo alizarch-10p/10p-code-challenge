@@ -12,8 +12,8 @@ This service allows for the storage, retrieval, and search of natural language d
 ## Setup Instructions
 
 1. **Clone the repository**
-   - `git clone [repository-url]`
-   - Navigate to the project directory: `cd [project-directory]`
+   - `git clone https://github.com/alizarch-10p/10p-code-challenge.git`
+   - Navigate to the project directory: `cd 10p-code-challenge`
 
 2. **Build the Image**
    - Run `docker-compose --build`
