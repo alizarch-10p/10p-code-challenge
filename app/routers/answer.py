@@ -1,3 +1,4 @@
+import re
 from fastapi import APIRouter, HTTPException
 from app.utils.elasticsearch import get_elasticsearch
 from elasticsearch_dsl import Search
@@ -14,9 +15,14 @@ logger = logging.getLogger(__name__)
 
 es = get_elasticsearch()
 
+special_characters_pattern = re.compile(r'[^a-zA-Z0-9\s]')
 
 @router.get("/search/")
 async def search_documents(query: str, top_k: int = 10):
+    if special_characters_pattern.search(query):
+        logger.error("422: Search query contains special characters")
+        raise HTTPException(status_code=422, detail="Search query contains special characters")
+
     try:
         search = Search(using=es, index="documents").query("match", content=query)[:top_k]
         response = search.execute()
@@ -28,6 +34,10 @@ async def search_documents(query: str, top_k: int = 10):
 
 @router.get("/answer/")
 async def get_answer(query: str):
+    if special_characters_pattern.search(query):
+        logger.error("422: Query contains special characters")
+        raise HTTPException(status_code=422, detail="Query contains special characters")
+
     try:
         search = Search(using=es, index="documents").query("match", content=query)[:5]
         response = search.execute()
