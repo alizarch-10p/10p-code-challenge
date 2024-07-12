@@ -12,12 +12,12 @@ logger = logging.getLogger(__name__)
 
 es = get_elasticsearch()
 
-special_characters_pattern = re.compile(r'[^a-zA-Z0-9\s]')
+special_characters_pattern = re.compile(r'^[^=><]*$')
 
 
 @router.post("/documents/")
 async def create_document(document: Document):
-    if special_characters_pattern.search(document.content):
+    if not special_characters_pattern.match(document.content):
         logger.error("422: Document content contains special characters")
         raise HTTPException(status_code=422, detail="Document content contains special characters")
 

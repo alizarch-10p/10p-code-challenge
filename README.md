@@ -30,6 +30,9 @@ This service allows for the storage, retrieval, and search of natural language d
 
 ## API Documentation
 
+### Important Note
+In all API form data, the characters `=`, `<`, and `>` are not allowed.
+
 ### Endpoints
 
 - `POST /documents/`

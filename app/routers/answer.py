@@ -15,11 +15,11 @@ logger = logging.getLogger(__name__)
 
 es = get_elasticsearch()
 
-special_characters_pattern = re.compile(r'[^a-zA-Z0-9\s]')
+special_characters_pattern = re.compile(r'^[^=><]*$')
 
 @router.get("/search/")
 async def search_documents(query: str, top_k: int = 10):
-    if special_characters_pattern.search(query):
+    if not special_characters_pattern.match(query):
         logger.error("422: Search query contains special characters")
         raise HTTPException(status_code=422, detail="Search query contains special characters")
 
@@ -34,7 +34,7 @@ async def search_documents(query: str, top_k: int = 10):
 
 @router.get("/answer/")
 async def get_answer(query: str):
-    if special_characters_pattern.search(query):
+    if not special_characters_pattern.match(query):
         logger.error("422: Query contains special characters")
         raise HTTPException(status_code=422, detail="Query contains special characters")
 
